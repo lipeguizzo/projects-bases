@@ -1,0 +1,31 @@
+# Ambiente virtual
+.venv/
+venv/
+env/
+*.pyc
+__pycache__/
+
+# Configurações de ambiente
+.env
+
+# Banco de dados local
+db.sqlite3
+
+# Arquivos de logs e cache
+*.log
+*.pot
+*.py[co]
+*.swp
+*.swo
+.DS_Store
+
+# Mídias e arquivos estáticos gerados
+staticfiles/
+media/
+
+# Docker
+docker-compose.override.yml
+
+# VSCode e PyCharm
+.vscode/
+.idea/

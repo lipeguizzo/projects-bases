@@ -1,0 +1,31 @@
+name: CI Workflow
+
+on:
+  push:
+    branches: [main, develop]
+
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: 'pip'
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Verificar lint
+        run: flake8 .
+
+      - name: Aplicar migrações
+        run: python manage.py migrate
