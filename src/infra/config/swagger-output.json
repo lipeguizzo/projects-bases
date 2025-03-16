@@ -1,0 +1,1773 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "Project Basic API",
+    "description": ""
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": ["http"],
+  "tags": [
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Users"
+    },
+    {
+      "name": "Roles"
+    },
+    {
+      "name": "Organizations"
+    },
+    {
+      "name": "Companies"
+    },
+    {
+      "name": "Files"
+    }
+  ],
+  "securityDefinitions": {
+    "BearerAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization",
+      "description": "Bearer token para ter acesso a api endpoints",
+      "scheme": "bearer"
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "components": {
+    "schemas": {
+      "PaginationResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "_meta": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "type": "integer"
+              },
+              "pageSize": {
+                "type": "integer"
+              },
+              "totalItems": {
+                "type": "integer"
+              },
+              "totalPages": {
+                "type": "integer"
+              },
+              "links": {
+                "type": "object",
+                "properties": {
+                  "first": {
+                    "type": "string"
+                  },
+                  "prev": {
+                    "type": "string"
+                  },
+                  "next": {
+                    "type": "string"
+                  },
+                  "last": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "AuthLogin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthLoginResponse": {
+        "type": "object",
+        "properties": {
+          "user": { "$ref": "#/components/schemas/User" },
+          "token": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthRefresh": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthRefreshResponse": {
+        "type": "object",
+        "properties": {
+          "user": { "$ref": "#/components/schemas/User" },
+          "token": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthRegister": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string",
+            "enum": ["M", "F", "O"]
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "organizationName": {
+            "type": "string"
+          },
+          "organizationTradeName": {
+            "type": "string"
+          },
+          "organizationEmail": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthRecoverPassword": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthRecoverPasswordResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthResetPassword": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "Organization": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "tradeName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "DISABLED", "BLOCKED", "WAITING"]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "OrganizationCreate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "tradeName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "DISABLED", "BLOCKED", "WAITING"]
+          }
+        }
+      },
+      "OrganizationUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "tradeName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "DISABLED", "BLOCKED", "WAITING"]
+          }
+        }
+      },
+      "OrganizationUpdateStatus": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "DISABLED", "BLOCKED", "WAITING"]
+          }
+        }
+      },
+      "Company": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "tradeName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "integer"
+          },
+          "organization": { "$ref": "#/components/schemas/Organization" },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "DISABLED", "BLOCKED", "WAITING"]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "CompanyCreate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "tradeName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "DISABLED", "BLOCKED", "WAITING"]
+          }
+        }
+      },
+      "CompanyUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "tradeName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "DISABLED", "BLOCKED", "WAITING"]
+          }
+        }
+      },
+      "CompanyUpdateStatus": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "DISABLED", "BLOCKED", "WAITING"]
+          }
+        }
+      },
+      "Role": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "isDefault": {
+            "type": "boolean"
+          },
+          "organizationId": {
+            "type": "integer"
+          },
+          "organization": {
+            "$ref": "#/components/schemas/Organization"
+          },
+          "companyId": {
+            "type": "integer"
+          },
+          "company": {
+            "$ref": "#/components/schemas/Company"
+          },
+          "reference": {
+            "type": "string",
+            "enum": ["ADMIN", "ADMIN_ORGANIZATION", "ADMIN_COMPANY", "CLIENT"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "DISABLED", "BLOCKED", "WAITING"]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "RoleCreate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "isDefault": {
+            "type": "boolean"
+          },
+          "organizationId": {
+            "type": "integer"
+          },
+          "companyId": {
+            "type": "integer"
+          },
+          "reference": {
+            "type": "string",
+            "enum": ["ADMIN", "ADMIN_ORGANIZATION", "ADMIN_COMPANY", "CLIENT"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "DISABLED", "BLOCKED", "WAITING"]
+          },
+          "abilitiesIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "RoleUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "isDefault": {
+            "type": "boolean"
+          },
+          "organizationId": {
+            "type": "integer"
+          },
+          "companyId": {
+            "type": "integer"
+          },
+          "reference": {
+            "type": "string",
+            "enum": ["ADMIN", "ADMIN_ORGANIZATION", "ADMIN_COMPANY", "CLIENT"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "DISABLED", "BLOCKED", "WAITING"]
+          },
+          "abilitiesIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "RoleUpdateStatus": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "DISABLED", "BLOCKED", "WAITING"]
+          }
+        }
+      },
+      "RoleAbilities": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "code": {
+              "type": "string"
+            },
+            "action": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date"
+            },
+            "deletedAt": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        }
+      },
+      "StoredFile": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "uuid": {
+            "type": "string"
+          },
+          "alt": {
+            "type": "string"
+          },
+          "originalName": {
+            "type": "string"
+          },
+          "storedName": {
+            "type": "string"
+          },
+          "relativePath": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "isPublic": {
+            "type": "boolean"
+          },
+          "checksum": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string",
+            "enum": ["M", "F", "O"]
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "integer"
+          },
+          "organization": {
+            "$ref": "#/components/schemas/Organization"
+          },
+          "companyId": {
+            "type": "integer"
+          },
+          "company": {
+            "$ref": "#/components/schemas/Company"
+          },
+          "roleId": {
+            "type": "integer"
+          },
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          },
+          "avatarId": {
+            "type": "integer"
+          },
+          "avatar": {
+            "$ref": "#/components/schemas/StoredFile"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "DISABLED", "BLOCKED", "WAITING"]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "UserCreate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string",
+            "enum": ["M", "F", "O"]
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "integer"
+          },
+          "companyId": {
+            "type": "integer"
+          },
+          "roleId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "DISABLED", "BLOCKED", "WAITING"]
+          }
+        }
+      },
+      "UserUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string",
+            "enum": ["M", "F", "O"]
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "integer"
+          },
+          "companyId": {
+            "type": "integer"
+          },
+          "roleId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "DISABLED", "BLOCKED", "WAITING"]
+          }
+        }
+      },
+      "UserUpdateStatus": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "DISABLED", "BLOCKED", "WAITING"]
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/AuthLogin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/AuthLoginResponse"
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": ["Auth"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/AuthRefresh"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/AuthRefreshResponse"
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/AuthRegister"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Criado!",
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      }
+    },
+    "/auth/recover-password": {
+      "post": {
+        "tags": ["Auth"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/AuthRecoverPassword"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/AuthRecoverPasswordResponse"
+            }
+          }
+        }
+      }
+    },
+    "/auth/reset-password": {
+      "patch": {
+        "tags": ["Auth"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/AuthResetPassword"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      }
+    },
+    "/companies": {
+      "post": {
+        "tags": ["Companies"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CompanyCreate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Criado!",
+            "schema": {
+              "$ref": "#/components/schemas/Company"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Companies"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "includeDeleted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/PaginationResponse"
+            }
+          }
+        }
+      }
+    },
+    "/companies/{id}": {
+      "get": {
+        "tags": ["Companies"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/Company"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Companies"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CompanyUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/Company"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Companies"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/Company"
+            }
+          }
+        }
+      }
+    },
+    "/companies/{id}/avatar": {
+      "post": {
+        "tags": ["Companies"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/Company"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Companies"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/Company"
+            }
+          }
+        }
+      }
+    },
+    "/companies/{id}/status": {
+      "patch": {
+        "tags": ["Companies"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CompanyUpdateStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/Company"
+            }
+          }
+        }
+      }
+    },
+    "/organizations": {
+      "post": {
+        "tags": ["Organizations"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/OrganizationCreate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Criado!",
+            "schema": {
+              "$ref": "#/components/schemas/Organization"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Organizations"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "includeDeleted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/PaginationResponse"
+            }
+          }
+        }
+      }
+    },
+    "/organizations/{id}": {
+      "get": {
+        "tags": ["Organizations"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/Organization"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Organizations"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/OrganizationUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/Organization"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Organizations"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/Organization"
+            }
+          }
+        }
+      }
+    },
+    "/organizations/{id}/avatar": {
+      "post": {
+        "tags": ["Organizations"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/Organization"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Organizations"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/Organization"
+            }
+          }
+        }
+      }
+    },
+    "/organizations/{id}/status": {
+      "patch": {
+        "tags": ["Organizations"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/OrganizationUpdateStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/Organization"
+            }
+          }
+        }
+      }
+    },
+    "/roles": {
+      "post": {
+        "tags": ["Roles"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RoleCreate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Criado!",
+            "schema": {
+              "$ref": "#/components/schemas/Role"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Roles"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "includeDeleted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/PaginationResponse"
+            }
+          }
+        }
+      }
+    },
+    "/roles/all-abilities": {
+      "get": {
+        "tags": ["Roles"],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/RoleAbilities"
+            }
+          }
+        }
+      }
+    },
+    "/roles/{id}": {
+      "get": {
+        "tags": ["Roles"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/Role"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Roles"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RoleUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/Role"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Roles"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/Role"
+            }
+          }
+        }
+      }
+    },
+    "/roles/{id}/status": {
+      "patch": {
+        "tags": ["Roles"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/RoleUpdateStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/Role"
+            }
+          }
+        }
+      }
+    },
+    "/roles/{id}/abilities": {
+      "get": {
+        "tags": ["Roles"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/RoleAbilities"
+            }
+          }
+        }
+      }
+    },
+    "/files/public/{uuid}": {
+      "get": {
+        "tags": ["Files"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!"
+          }
+        }
+      }
+    },
+    "/files/{uuid}": {
+      "get": {
+        "tags": ["Files"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!"
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/UserCreate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Criado!",
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Users"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "includeDeleted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/PaginationResponse"
+            }
+          }
+        }
+      }
+    },
+    "/users/self": {
+      "get": {
+        "tags": ["Users"],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Users"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/UserUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}/avatar": {
+      "post": {
+        "tags": ["Users"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Users"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/UserUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}/status": {
+      "patch": {
+        "tags": ["Users"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/UserUpdateStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso!",
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      }
+    }
+  }
+}

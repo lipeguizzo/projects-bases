@@ -1,0 +1,192 @@
+generator client {
+  provider = "prisma-client-js"
+
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  name           String    @unique @db.VarChar(100)
+  email          String    @unique @db.VarChar(100)
+  password       String    @db.VarChar(200)
+  gender         Gender    @default(M)
+  phone          String    @db.VarChar(20)
+  status         Status    @default(ACTIVE)
+  roleId         Int       @map("role_id")
+  organizationId Int?      @map("organization_id")
+  companyId      Int?      @map("company_id")
+  avatarId       Int?      @unique @map("avatar_id")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  role         Role?         @relation(fields: [roleId], references: [id])
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  company      Company?      @relation(fields: [companyId], references: [id])
+  avatar       StoredFile?   @relation(fields: [avatarId], references: [id])
+
+  @@map("users")
+}
+
+model Role {
+  id             Int            @id @default(autoincrement())
+  name           String         @unique @db.VarChar(100)
+  isDefault      Boolean        @default(false)
+  reference      RoleReferences @default(CLIENT)
+  status         Status         @default(ACTIVE)
+  organizationId Int?           @map("organization_id")
+  companyId      Int?           @map("company_id")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  deletedAt      DateTime?      @map("deleted_at")
+
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  company        Company?      @relation(fields: [companyId], references: [id])
+  users          User[]
+  rolesAbilities RoleAbility[]
+
+  @@map("roles")
+}
+
+model Ability {
+  id        Int            @id @default(autoincrement())
+  code      AbilityCodes   @default(USERS)
+  action    AbilityActions @default(CREATE)
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
+  deletedAt DateTime?      @map("deleted_at")
+
+  rolesAbilities RoleAbility[]
+
+  @@map("abilities")
+}
+
+model RoleAbility {
+  roleId    Int      @map("role_id")
+  abilityId Int      @map("ability_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  role    Role    @relation(fields: [roleId], references: [id])
+  ability Ability @relation(fields: [abilityId], references: [id])
+
+  @@id([roleId, abilityId])
+  @@map("role_abilities")
+}
+
+model Organization {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique @db.VarChar(100)
+  tradeName String?   @map("trade_name") @db.VarChar(100)
+  email     String    @unique @db.VarChar(100)
+  status    Status    @default(ACTIVE)
+  addressId Int       @map("address_id")
+  avatarId  Int?      @unique @map("avatar_id")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  address   Address     @relation(fields: [addressId], references: [id])
+  avatar    StoredFile? @relation(fields: [avatarId], references: [id])
+  companies Company[]
+  users     User[]
+  roles     Role[]
+
+  @@map("organizations")
+}
+
+model Company {
+  id             Int       @id @default(autoincrement())
+  name           String    @unique @db.VarChar(100)
+  tradeName      String?   @map("trade_name") @db.VarChar(100)
+  email          String    @unique @db.VarChar(100)
+  status         Status    @default(ACTIVE)
+  organizationId Int       @map("organization_id")
+  addressId      Int       @map("address_id")
+  avatarId       Int?      @unique @map("avatar_id")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  address      Address       @relation(fields: [addressId], references: [id])
+  avatar       StoredFile?   @relation(fields: [avatarId], references: [id])
+  users        User[]
+  roles        Role[]
+
+  @@map("companies")
+}
+
+model Address {
+  id           Int       @id @default(autoincrement())
+  state        String    @db.Char(2)
+  city         String    @db.VarChar(100)
+  street       String    @db.VarChar(100)
+  neighborhood String    @db.VarChar(100)
+  complement   String?   @db.VarChar(150)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  organizations Organization[]
+  companies     Company[]
+
+  @@map("addresses")
+}
+
+model StoredFile {
+  id           Int      @id @default(autoincrement())
+  uuid         String   @unique() @default(uuid()) @db.VarChar(100)
+  alt          String
+  originalName String   @map("original_name") @db.VarChar(100)
+  storedName   String   @map("stored_name") @db.VarChar(150)
+  relativePath String   @map("relative_path")
+  contentType  String   @map("content_type")
+  isPublic     Boolean  @default(false) @map("is_public")
+  checksum     String   @db.Char(32)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user         User?
+  organization Organization?
+  company      Company?
+
+  @@map("stored_files")
+}
+
+enum Gender {
+  M
+  F
+  O
+}
+
+enum Status {
+  ACTIVE
+  DISABLED
+  BLOCKED
+  WAITING
+}
+
+enum RoleReferences {
+  ADMIN
+  ADMIN_ORGANIZATION
+  ADMIN_COMPANY
+  CLIENT
+}
+
+enum AbilityCodes {
+  ADMIN
+  ORGANIZATIONS
+  COMPANIES
+  USERS
+  ROLES
+}
+
+enum AbilityActions {
+  READ
+  CREATE
+  UPDATE
+  DELETE
+}
