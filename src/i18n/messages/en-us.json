@@ -1,0 +1,67 @@
+{
+  "HomePage": {
+    "HomeSection": {
+      "title": "NEXT.JS",
+      "title-mobile": "NEXT.JS",
+      "subtitle": "Fast, modern and efficient",
+      "subtitle-mobile": "Fast, <br>modern</br><br>and efficient</br>"
+    },
+    "AboutSection": {
+      "title": "ABOUT NEXT.JS",
+      "title-mobile": "ABOUT <br>NEXT.JS</br>",
+      "summary": "<span>Next.js</span> is a framework for <span>React</span> that offers hybrid rendering (<span>SSR</span> and <span>SSG</span>), automatic routing, API Routes, image optimization and <span>CSS-in-JS</span> support, being ideal for high-performance applications with improved <span>SEO</span>, such as blogs, e-commerce and dashboards."
+    },
+    "UsesSection": {
+      "title": "BEST USES OF NEXT.JS",
+      "item-1": "SEO-optimized web applications (SSR and SSG improve indexing)",
+      "item-2": "Fast static sites (with static generation support - SSG)",
+      "item-3": "Simple integration with Tailwind CSS, MUI and other libraries",
+      "item-4": "Easy internationalization (i18n) (Next.js has native support)",
+      "item-5": "Efficient dynamic pages (with ISR - Incremental Static Regeneration)",
+      "item-6": "Better developer experience (Hot Reloading, Fast Refresh)"
+    },
+    "ProjectsDetailsSection": {
+      "title": "Want to see more <span>details</span>? <br>Check out all <span>projects</span>!</br>",
+      "title-mobile": "Want to <br>see more</br> <br><span>details</span>?</br> Check <br>out all</br> <span>projects</span>!",
+      "button": "Go to projects"
+    }
+  },
+  "ProjectsPage": {
+    "HomeSection": {
+      "title": "BASE PROJECTS",
+      "title-mobile": "BASE PROJECTS",
+      "subtitle": "Starting Point for New Solutions",
+      "subtitle-mobile": "Starting <br>Point for</br><br>New Solutions</br>"
+    },
+    "BaseProjectsSection": {
+      "title": "PROJECTS"
+    }
+  },
+  "SharedSection": {
+    "ContactSection": {
+      "title": "CONTACT"
+    }
+  },
+  "Components": {
+    "SwitchLanguage": {
+      "label": "Languages"
+    },
+    "Navbar": {
+      "home": "HOME",
+      "about": "ABOUT",
+      "uses": "USES",
+      "projects": "PROJECTS",
+      "contact": "CONTACT"
+    },
+    "Footer": {
+      "website": "Website",
+      "contacts": "Contacts",
+      "reserved": "All rights reserved.",
+      "home": "Home",
+      "about": "About",
+      "uses": "Uses",
+      "projects": "Projects",
+      "contact": "Contact"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+services:
+  app:
+    user: root
+    build: .
+    volumes:
+      - .:/home/node/app
+    ports:
+      - '${PORT}:3000'
+    command: 'npm run dev'
+  cli:
+    user: root
+    build: .
+    volumes:
+      - .:/home/node/app
+    command: 'tail -f /dev/null'

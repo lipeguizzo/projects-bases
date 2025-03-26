@@ -1,0 +1,67 @@
+{
+  "HomePage": {
+    "HomeSection": {
+      "title": "NEXT.JS",
+      "title-mobile": "NEXT.JS",
+      "subtitle": "Rápido, moderno e eficiente",
+      "subtitle-mobile": "Rápido, <br>moderno</br><br>e eficiente</br>"
+    },
+    "AboutSection": {
+      "title": "SOBRE O NEXT.JS",
+      "title-mobile": "SOBRE <br>O NEXT.JS</br>",
+      "summary": "<span>Next.js</span> é um framework para <span>React</span> que oferece renderização híbrida (<span>SSR</span> e <span>SSG</span>), roteamento automático, API Routes, otimização de imagens e suporte a <span>CSS-in-JS</span>, sendo ideal para aplicações performáticas com <span>SEO</span> aprimorado, como blogs, e-commerces e dashboards."
+    },
+    "UsesSection": {
+      "title": "MELHORES USOS DO NEXT.JS",
+      "item-1": "Aplicações web com SEO otimizado (SSR e SSG melhoram a indexação).",
+      "item-2": "Sites estáticos rápidos (com suporte a geração estática - SSG).",
+      "item-3": "Integração simplificada com Tailwind CSS, MUI e outras bibliotecas.",
+      "item-4": "Internacionalização (i18n) fácil (Next.js tem suporte nativo).",
+      "item-5": "Páginas dinâmicas eficientes (com ISR - Incremental Static Regeneration).",
+      "item-6": "Melhor experiência para desenvolvedores (Hot Reloading, Fast Refresh)."
+    },
+    "ProjectsDetailsSection": {
+      "title": "Quer ver mais <span>detalhes</span>? <br>Confira todos os <span>projetos</span>!</br>",
+      "title-mobile": "Quer <br>ver mais</br> <br><span>detalhes</span>?</br> <br>Confira todos os <span>projetos</span>!</br>",
+      "button": "Ir para projetos"
+    }
+  },
+  "ProjectsPage": {
+    "HomeSection": {
+      "title": "PROJETOS BASE",
+      "title-mobile": "PROJETOS BASE",
+      "subtitle": "Ponto de Partida para Novas Soluções",
+      "subtitle-mobile": "Ponto de <br>Partida para</br><br>Novas Soluções</br>"
+    },
+    "BaseProjectsSection": {
+      "title": "PROJETOS"
+    }
+  },
+  "SharedSection": {
+    "ContactSection": {
+      "title": "CONTATO"
+    }
+  },
+  "Components": {
+    "SwitchLanguage": {
+      "label": "Idiomas"
+    },
+    "Navbar": {
+      "home": "HOME",
+      "about": "SOBRE",
+      "uses": "USOS",
+      "projects": "PROJETOS",
+      "contact": "CONTATO"
+    },
+    "Footer": {
+      "website": "Site",
+      "contacts": "Contatos",
+      "reserved": "Todos os direitos reservados.",
+      "home": "Home",
+      "about": "Sobre",
+      "uses": "Usos",
+      "projects": "Projetos",
+      "contact": "Contato"
+    }
+  }
+}
