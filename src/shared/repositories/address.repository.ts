@@ -1,5 +1,5 @@
-import { AddressCityEntity } from '../domain/entities/address-city.entity';
 import { ID } from '../types/id';
+import { AddressCityEntity } from '../domain/entities/address-city.entity';
 import { AddressStateEntity } from './../domain/entities/address-state.entity';
 import axios, { AxiosInstance } from 'axios';
 
